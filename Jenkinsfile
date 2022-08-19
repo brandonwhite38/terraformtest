@@ -1,5 +1,8 @@
 pipeline {
     agent any
+    tools {
+        terraform 'Terraform'
+    }
 
     stages {
         stage('checkout') {
@@ -8,22 +11,16 @@ pipeline {
             }
         }
         
-        stage('terraform') {
-            steps {
-                sh './terraformw validate -no-color'
-            }
-        }
-        
         stage ('Terraform init') {
             steps {
-                sh ("terraform init");
+                sh label: '', script: 'terraform init'
             }
         }
         
         stage ('Terraform Action') {
             steps {
                 echo "terraform action from the parameter is -> ${action}"
-                sh ("terraform ${action}");
+                sh ('terraform ${action}');
             }
         }
     }
